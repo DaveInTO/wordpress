@@ -19,7 +19,7 @@ export default defineConfig({
 	],
 	build: {
 		outDir: '/var/www/wordpress/wp-content/plugins/contact-us/assets',
-		emptyOutDir: true,
+		emptyOutDir: false,
 		sourcemap: true,
 		minify:false,
 		cssCodeSplit: false,
