@@ -1,30 +1,17 @@
 <script setup lang="ts">
-	import Schools from '@/components/Schools.vue';
-	import {InstagramIcon,CircleFadingPlusIcon}  from 'lucide-vue-next';
-	import Camps from '@/components/Camps.vue';
-	import Vendors from '@/components/Vendors.vue';
-	import Careers from '@/components/Careers.vue';
-	import RFP from '@/components/RFP.vue';
-	import General from '@/components/General.vue';
-	import {Label} from '@/components/ui/label';
-	import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, } from '@/components/ui/card'
-	import {Input} from '@/components/ui/input';
 	import {ref} from 'vue';
-	const tiles = [
-	  { id: 'schools', label: 'Childcare & Schools', desc: 'Snacktastic menus, allergy-smart systems, right-on-time deliveries.', cta: 'Get a Quote', icon: '/assets/gfx/ym-childcare.png' },
-	  { id: 'camps', label: 'Camps & Programs', desc: 'Summer fuel that survives buses, sun, and schedule chaos.', cta: 'Plan My Season', icon: '/assets/gfx/ym-camps.png' },
-	  { id: 'facilities', label: 'Facilities / RFPs', desc: 'Specs, site tours, compliance docs—served hot.', cta: ' RFP / Tour', icon: '/assets/gfx/ym-facilities.png' },
-	  { id: 'careers', label: 'Careers', desc: 'Make food little humans love.', cta: 'Open Roles', icon: '/assets/gfx/ym-careers.png',"link":"/careers" },
-	  { id: 'media', label: 'Media / Vendors', desc: 'Press, partnerships, and procurement.', cta: 'Contact Us', icon: '/assets/gfx/ym-media.png' },
-	  { id: 'general', label: 'General', desc: 'Not sure yet? We’ll point you right.', cta: 'Other', icon: '/assets/gfx/ym-general.png' },
-	 ];
-	const selectedTab=ref(tiles[5]);
-	const selected=ref(false);
-	const form = ref<Record<string,string>>({});
-	const submitted = ref(false);
-	const handleSubmit = () => {
-	console.log('submitted');
-	};
+import {InstagramIcon,CircleFadingPlusIcon}  from 'lucide-vue-next';
+import { tiles, forms } from '@/data/'
+import DynamicForm from '@/components/DynamicForm.vue';
+import Tiles from '@/components/Tiles.vue';
+import {Label} from '@/components/ui/label';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, } from '@/components/ui/card'
+import {Input} from '@/components/ui/input';
+const selectedTab=ref(tiles[5]);
+const selected=ref(false);
+const form = ref<Record<string,string>>({});
+const submitted = ref(false);
+
 
 </script>
 
@@ -54,7 +41,6 @@
 						</div>
 					</template>
 				</div>
-				<AudienceTiles />
 			</section>
 			<section name="contactinfo yc:mt-4">
 				<div class="yc:flex  yc:w-full yc:justify-center yc:mt-10 yc:p-5">
@@ -110,24 +96,7 @@
 				</div>
 				</CardHeader>
 				<CardContent>
-				<template v-if="selectedTab!.id=='general'">
-					<General/>
-				</template>
-				<template v-else-if="selectedTab!.id=='schools'">
-					<Schools/>
-				</template>
-				<template v-else-if="selectedTab!.id=='camps'">
-					<Camps/>
-				</template>
-				<template v-else-if="selectedTab!.id=='facilities'">
-					<RFP/>
-				</template>
-				<template v-else-if="selectedTab!.id=='careers'">
-					<Careers/>
-				</template>
-				<template v-else-if="selectedTab!.id=='media'">
-					<Vendors/>
-				</template>
+				<DynamicForm :fields="forms[selectedTab.id].fields" :title="selectedTab!.label"/>
 				</CardContent>
 				</Card>
 			</section>
