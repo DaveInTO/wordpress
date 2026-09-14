@@ -1,15 +1,15 @@
-import type { Tile, FieldOption,FieldDefinition } from '@/types'
+import type { Tile, FormDefinition } from '@/types'
 export  const tiles = [
 	{ id: 'schools', label: 'Childcare & Schools', desc: 'Snacktastic menus, allergy-smart systems, right-on-time deliveries.', cta: 'Get a Quote', icon: '/assets/gfx/ym-childcare.png' },
 	{ id: 'camps', label: 'Camps & Programs', desc: 'Summer fuel that survives buses, sun, and schedule chaos.', cta: 'Plan My Season', icon: '/assets/gfx/ym-camps.png' },
-	{ id: 'facilities', label: 'Facilities / RFPs', desc: 'Specs, site tours, compliance docs—served hot.', cta: ' RFP / Tour', icon: '/assets/gfx/ym-facilities.png' },
+	{ id: 'rfp', label: 'Facilities / RFPs', desc: 'Specs, site tours, compliance docs—served hot.', cta: ' RFP / Tour', icon: '/assets/gfx/ym-facilities.png' },
 	{ id: 'careers', label: 'Careers', desc: 'Make food little humans love.', cta: 'Open Roles', icon: '/assets/gfx/ym-careers.png',"link":"/careers" },
 	{ id: 'vendors', label: 'Media / Vendors', desc: 'Press, partnerships, and procurement.', cta: 'Contact Us', icon: '/assets/gfx/ym-media.png' },
 	{ id: 'general', label: 'General', desc: 'Not sure yet? We’ll point you right.', cta: 'Other', icon: '/assets/gfx/ym-general.png' },
 ];
 
 
-export const forms: Record<string, { title: string; fields: FieldDefinition[] }> = {
+export const forms: Record<string, FormDefinition> = {
 	general: {
 		title: 'Contact Us',
 		fields: [
@@ -43,20 +43,34 @@ export const forms: Record<string, { title: string; fields: FieldDefinition[] }>
 	},
 
 	schools: {
-		title: 'School / Organization Form',
+		title: 'Childcare & Schools Inquiry',
+		submitLabel: 'REQUEST INFORMATION & PRICING',
+		successMessage:
+			'Thank you for contacting Yummy Catering. A member of our team will be in touch shortly to discuss your catering needs.',
 		fields: [
+			{ name: 'sectionContact', label: 'Contact Information', fieldtype: 'section' },
 			{
 				name: 'organization',
-				label: 'Organization Name',
+				label: 'Organization / Centre Name',
 				required: true,
-				placeholder: 'Organization name',
+				placeholder: 'Organization or centre name',
 				fieldtype: 'text',
+				autocomplete: 'organization',
+			},
+			{
+				name: 'contactName',
+				label: 'Contact Name',
+				required: true,
+				placeholder: 'Jane Doe',
+				fieldtype: 'text',
+				autocomplete: 'name',
 			},
 			{
 				name: 'role',
-				label: 'Role',
-				placeholder: 'Your role',
+				label: 'Role / Position',
+				placeholder: 'e.g. Centre Director',
 				fieldtype: 'text',
+				autocomplete: 'organization-title',
 			},
 			{
 				name: 'email',
@@ -68,24 +82,11 @@ export const forms: Record<string, { title: string; fields: FieldDefinition[] }>
 			},
 			{
 				name: 'phone',
-				label: 'Phone',
+				label: 'Phone Number',
 				required: true,
 				placeholder: '(555) 123-4567',
-				fieldtype: 'text',
+				fieldtype: 'tel',
 				autocomplete: 'tel',
-			},
-			{
-				name: 'address1',
-				label: 'Address Line 1',
-				required: true,
-				placeholder: '123 Main Street',
-				fieldtype: 'text',
-			},
-			{
-				name: 'address2',
-				label: 'Address Line 2',
-				placeholder: 'Apartment, suite, unit, etc. (optional)',
-				fieldtype: 'text',
 			},
 			{
 				name: 'city',
@@ -93,42 +94,108 @@ export const forms: Record<string, { title: string; fields: FieldDefinition[] }>
 				required: true,
 				placeholder: 'City or area',
 				fieldtype: 'text',
+				autocomplete: 'address-level2',
 			},
+
+			{ name: 'sectionOrganization', label: 'Organization Information', fieldtype: 'section' },
 			{
-				name: 'contractType',
-				label: 'Contract Type',
+				name: 'organizationType',
+				label: 'Type of Organization',
+				required: true,
+				placeholder: 'Select organization type',
 				fieldtype: 'dropdown',
 				options: [
-					{ label: 'Temporary', value: 'temporary' },
-					{ label: 'Permanent', value: 'permanent' },
+					{ label: 'Non-Profit', value: 'non-profit' },
+					{ label: 'Private', value: 'private' },
+					{ label: 'Summer Camp', value: 'summer-camp' },
 				],
 			},
 			{
-				name: 'currentLocation',
-				label: 'Current Location',
-				fieldtype: 'dropdown',
+				name: 'locations',
+				label: 'Number of Locations',
+				placeholder: 'e.g. 3',
+				fieldtype: 'number',
+				min: 1,
+			},
+			{
+				name: 'dailyEnrollment',
+				label: 'Approximate Daily Enrollment / Number of Children',
+				required: true,
+				placeholder: 'e.g. 120',
+				fieldtype: 'number',
+				min: 1,
+			},
+
+			{ name: 'sectionServices', label: 'Services Needed', fieldtype: 'section' },
+			{
+				name: 'services',
+				label: 'What Services Are You Interested In?',
+				required: true,
+				helptext: 'Select all that apply.',
+				fieldtype: 'checkbox-group',
+				joinWith: ' + ',
 				options: [
-					{ label: 'Onsite Cook', value: 'onsite-cook' },
-					{ label: 'Catered', value: 'catered' },
+					{ label: 'A.M. Snack', value: 'am-snack' },
+					{ label: 'Hot Lunch', value: 'hot-lunch' },
+					{ label: 'P.M. Snack', value: 'pm-snack' },
 				],
 			},
 			{
-				name: 'sitesEnrolment',
-				label: 'Number of Locations and Daily Enrollment',
-				placeholder: 'Number of sites and daily enrolment',
-				fieldtype: 'text',
-			},
-			{
-				name: 'mealsPerDay',
-				label: 'Meals/Day & Target Start Date',
-				placeholder: 'Breakfast/Lunch/Snacks – Target start date',
+				name: 'targetStartDate',
+				label: 'Target Start Date',
 				fieldtype: 'date',
 			},
 			{
-				name: 'deliveryWindow',
-				label: 'Delivery Window / Site Constraints',
-				placeholder: 'Specify delivery window and constraints',
+				name: 'cateringType',
+				label: 'Type of Catering Required',
+				required: true,
+				fieldtype: 'radio',
+				options: [
+					{ label: 'Permanent Catering', value: 'permanent' },
+					{ label: 'Temporary Catering', value: 'temporary' },
+				],
+			},
+
+			{ name: 'sectionCurrent', label: 'Current Catering Information', fieldtype: 'section' },
+			{
+				name: 'usesCaterer',
+				label: 'Do You Currently Use a Catering Company?',
+				fieldtype: 'radio',
+				options: [
+					{ label: 'Yes', value: 'yes' },
+					{ label: 'No', value: 'no' },
+				],
+			},
+			{
+				name: 'currentProvider',
+				label: 'Current Catering Provider (Optional)',
+				placeholder: 'Provider name',
 				fieldtype: 'text',
+				showIf: { field: 'usesCaterer', equals: 'yes' },
+			},
+
+			{ name: 'sectionContactMethod', label: 'How Would You Like Us to Contact You?', fieldtype: 'section' },
+			{
+				name: 'preferredContact',
+				label: 'Preferred Way to Connect',
+				required: true,
+				helptext: 'Select all that apply.',
+				fieldtype: 'checkbox-group',
+				options: [
+					{ label: 'Email', value: 'email' },
+					{ label: 'Phone', value: 'phone' },
+					{ label: 'Schedule a Site Visit at Your Centre / Location', value: 'site-visit' },
+					{ label: 'Schedule a Site Visit and Tour at Our Yummy Catering Food Plant', value: 'plant-tour' },
+				],
+			},
+
+			{ name: 'sectionAdditional', label: 'Additional Information', fieldtype: 'section' },
+			{
+				name: 'additionalInfo',
+				label: 'Anything Else You Would Like Us to Know?',
+				placeholder: 'Allergies, delivery constraints, timelines, anything else...',
+				fieldtype: 'textarea',
+				rows: 5,
 			},
 		],
 	},

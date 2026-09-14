@@ -129,10 +129,31 @@ function yummy_contact_handle_form($request) {
 		$params = $request->get_body_params();
 	}
 
-	// Sanitize all incoming fields dynamically
+	// Field labels sent by the front end so the notification email reads like the form
+	// rather than exposing internal field keys. Decoded before sanitizing so the JSON
+	// payload survives intact.
+	$labels = [];
+	if (!empty($params['_labels'])) {
+		$decoded = json_decode(is_string($params['_labels']) ? $params['_labels'] : '', true);
+		if (is_array($decoded)) {
+			foreach ($decoded as $k => $v) {
+				$labels[sanitize_key($k)] = sanitize_text_field((string) $v);
+			}
+		}
+		unset($params['_labels']);
+	}
+
+	// Sanitize all incoming fields dynamically, including nested array values
+	$sanitize_deep = function ($value) use (&$sanitize_deep) {
+		if (is_array($value)) {
+			return array_map($sanitize_deep, $value);
+		}
+		return is_scalar($value) ? sanitize_text_field((string) $value) : '';
+	};
+
 	$clean = [];
 	foreach ($params as $k => $v) {
-		$clean[$k] = is_string($v) ? sanitize_text_field($v) : $v;
+		$clean[$k] = $sanitize_deep($v);
 	}
 	$attachments = [];
 if (!empty($_FILES)) {
@@ -200,7 +221,8 @@ if (!empty($_FILES)) {
 		if ($key === 'email') {$email = $value;} 
 		if ($key === 'formType') {$formType = $value;continue;} 
 		$body .= '<tr>';
-		$body .= '<td style="padding:8px; font-weight:bold; border:1px solid #eee; background:#f9f9f9;">' . esc_html($key) . '</td>';
+		if ($value === '' || $value === []) continue; // skip fields the user left blank
+		$body .= '<td style="padding:8px; font-weight:bold; border:1px solid #eee; background:#f9f9f9;">' . esc_html($labels[$key] ?? $key) . '</td>';
 		$body .= '<td style="padding:8px; border:1px solid #eee;">' . esc_html(is_array($value) ? implode(', ', $value) : $value) . '</td>';
 		$body .= '</tr>';
 	}

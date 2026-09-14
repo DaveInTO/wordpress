@@ -1,6 +1,6 @@
 <script setup lang="ts">
 	import {ref} from 'vue';
-import {InstagramIcon,CircleFadingPlusIcon}  from 'lucide-vue-next';
+import {InstagramIcon,FacebookIcon,LinkedinIcon,YoutubeIcon}  from 'lucide-vue-next';
 import { tiles, forms } from '@/data/'
 import DynamicForm from '@/components/DynamicForm.vue';
 import Tiles from '@/components/Tiles.vue';
@@ -67,9 +67,38 @@ const submitted = ref(false);
 						</div>
 						<div class="yc:ml-3">
 							416-532-5250
-							<div class="yc:mt-2 yc:flex yc:justify-start yc:space-x-2">
-								<a href="https://www.facebook.com/yummycateringcanada" target="_new"> <CircleFadingPlusIcon class="yc:text-red-600"/> </a>
-								<a href="https://www.instagram.com/yummycatering" target="_new"><InstagramIcon class="yc:text-red-600"/></a>
+							<div className="yc:mt-2 yc:flex yc:justify-start yc:space-x-2">
+								  <a
+									      href="https://www.facebook.com/yummycateringcanada"
+									          target="_blank"
+										      rel="noopener noreferrer"
+										        >
+											    <FacebookIcon className="yc:text-red-600" />
+											      </a>
+
+									    <a
+										        href="https://www.linkedin.com/company/yummy-catering/"
+											    target="_blank"
+											        rel="noopener noreferrer"
+												  >
+												      <LinkedinIcon className="yc:text-red-600" />
+												        </a>
+
+										      <a
+											          href="https://www.instagram.com/yummycatering/"
+												      target="_blank"
+												          rel="noopener noreferrer"
+													    >
+													        <InstagramIcon className="yc:text-red-600" />
+														  </a>
+
+											        <a
+														    href="https://www.youtube.com/@YummyCateringca"
+														        target="_blank"
+															    rel="noopener noreferrer"
+															      >
+															          <YoutubeIcon className="yc:text-red-600" />
+																    </a>
 							</div>
 							<div class="yc:mt-2 "><a href="mailto:info@yummycatering.ca" target="_new">info@yummycatering.ca</a></div>
 							<div class="yc:mt-2 "><a href="mailto:info@yummycatering.ca" target="_new">info@yummycatering.ca</a></div>
@@ -96,7 +125,13 @@ const submitted = ref(false);
 				</div>
 				</CardHeader>
 				<CardContent>
-				<DynamicForm :fields="forms[selectedTab.id].fields" :title="selectedTab!.label"/>
+				<DynamicForm
+						:key="selectedTab.id"
+						:fields="forms[selectedTab.id].fields"
+						:title="selectedTab!.label"
+						:submit-label="forms[selectedTab.id].submitLabel"
+						:success-message="forms[selectedTab.id].successMessage"
+						/>
 				</CardContent>
 				</Card>
 			</section>
